@@ -66,15 +66,15 @@ var server = http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-
-var child = new (forever.Monitor)('app.js', {
-  max: 5,
-  silent: true,
-  args: []
-});
-
-child.on('exit', function () {
-  console.log('app.js has exited after 5 restarts');
-});
-
-child.start();
+//
+//var child = new (forever.Monitor)('app.js', {
+//  max: 5,
+//  silent: true,
+//  args: []
+//});
+//
+//child.on('exit', function () {
+//  console.log('app.js has exited after 5 restarts');
+//});
+//
+//child.start();

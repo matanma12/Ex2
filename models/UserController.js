@@ -19,10 +19,10 @@ exports.index = function(req, res) {
 };
 
 exports.signup = function(req, res) {
-  if(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(req.body.username)) {
-          req.session.errors = {signup:['please enter a valid email']};
-          res.redirect('/');
-  }
+  //if(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(req.body.username)) {
+  //        req.session.errors = {signup:['please enter a valid email']};
+  //        res.redirect('/');
+  //}
   if(req.body.password !== req.body.confirmPassword) {
     req.session.errors = {signup:['your passwords do not match']};
     res.redirect('/');
