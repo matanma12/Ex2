@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+    <title>The Sentence Game</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+<%if(user){%>
+<div class="heading">
+    <div class="title">
+        <h1>The Sentence Game</h1>
+    </div>
+    <div class="nav-container">
+        <a href="/games" class="navbar-link"><h2>games</h2></a>
+        <a href="/newgame" class="navbar-link"><h2>new game</h2></a>
+    </div>
+    <div class="user">
+        <h3>logged in as <%= user.username %></h3>
+        <a href="/signout"><h3>sign out</h3></a>
+    </div>
+</div>
+<%}%>
+<div class="notecard-wrapper">
+    <%var hasFinished = false;%>
+    <%var userTurn = false;%>
+    <%var notUserTurn = false;%>
+    <%games.forEach(function(game) {%>
+        <%if(game.finished){%>
+            <%hasFinished = true;%>
+        <%}%>
+        <%if(game.currentPlayer === user.username){%>
+            <%userTurn = true;%>
+        <%}else {%>
+            <%notUserTurn = true;%>
+        <%}%>
+    <%});%>
+    <%if(userTurn){%>
+    <div class="group">
+        <div class="notecard">
+            <h2>your turn</h2>
+        </div>
+        <%games.forEach(function(game) {%>
+            <%if(game.currentPlayer === user.username && !game.finished){%>
+                <a href='/game/<%= game.id%>'>
+                    <div class="notecard">
+                        <h4><%=game.players.join(', ')%></h4>
+                        <%if(game.finished){%>
+                        <p>This game is finished. Click to view the story.</p>
+                        <%} else {%>
+                            <%if(game.currentPlayer === user.username){%>
+                                <p>Turns left:<%= game.turnsLeft %></p>
+                                <p>It's your turn. Click to play.</p>
+                            <%} else{%>
+                                <p>Turns left:<%= game.turnsLeft %></p>
+                                <p>It's <%= game.currentPlayer %>s turn</p>
+                            <%}%>
+                        <%}%>
+                    </div>
+                </a>
+        </div>
+            <%}%>
+        <%});%>
+    <%}%>
+    <%if(notUserTurn){%>
+        <div class="group">
+            <div class="notecard">
+                <h2>not your turn</h2>
+            </div>
+            <%games.forEach(function(game) {%>
+                <%if(game.currentPlayer !== user.username && !game.finished){%>
+                    <a href= '/game/<%= game.id%>'>
+                        <div class="notecard">
+                            <h4><%=game.players.join(', ')%></h4>
+                            <%if(game.finished){%>
+                                <p>This game is finished. Click to view the story.</p>
+                            <%} else {%>
+                                <%if(game.currentPlayer === user.username){%>
+                                    <p>Turns left:<%= game.turnsLeft %> </p>
+                                    <p>It's your turn. Click to play.</p>
+                                <%} else{%>
+                                    <p>Turns left:<%= game.turnsLeft %></p>
+                                    <p>It's <%= game.currentPlayer %>s turn</p>
+                                <%}%>
+                            <%}%>
+                        </div>
+                    </a>
+            </div>
+            <%}%>
+        <%});%>
+    <%}%>
+    <%if(hasFinished){%>
+    <div class="group">
+        <div class="notecard">
+            <h2>finished</h2>
+        </div>
+        <%games.forEach(function(game) {%>
+            <%if(game.finished){%>
+        <a href='/game/<%= game.id%>'>
+            <div class="notecard">
+                <h4><%=game.players.join(', ')%></h4>
+                <%if(game.finished){%>
+                <p>This game is finished. Click to view the story.</p>
+                <%} else {%>
+                    <%if(game.currentPlayer === user.username){%>
+                        <p>Turns left:<%= game.turnsLeft %></p>
+                        <p>It's your turn. Click to play.</p>
+                    <%} else{%>
+                        <p>Turns left:<%= game.turnsLeft %></p>
+                        <p>It's <%= game.currentPlayer %>s turn</p>
+                    <%}%>
+                <%}%>
+            </div>
+        </a>
+        </div>
+        <%}%>
+    <%});%>
+    <%} if(!games.length){%>
+    <div class="group">
+        <div class="notecard">
+            <h2>no games</h2>
+            <a href='/newgame'>create a new game</a>
+        </div>
+    </div>
+    <%}%>
+</div>
+</body>
+</html>

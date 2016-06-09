@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <title>The Sentence Game</title>
+</head>
+<body>
+
+<div class="page">
+    <div class="page-header">
+        <h1>The Sentence Game</h1>
+    </div>
+    <form action="./signup" method="post">
+        <h2>create account</h2>
+        <%if(errors && errors.signup){ %>
+        <%for(var i=0; i<errors.signup.length; i++){%>
+        <div><%= errors.signup[i] %></div>
+        <%}}%>
+        <%if(success && success.signup){ %>
+        <%for(var i=0; i<success.signup.length; i++){%>
+        <div><%= success.signup[i] %></div>
+        <%}}%>
+        <div class="group">
+            <label>username:</label>
+            <input type="text" name="username" required="required"/>
+        </div>
+        <div class="group">
+            <label>password:</label>
+            <input type="password" name="password" required="required"/>
+        </div>
+        <div class="group">
+            <label>confirm:</label>
+            <input type="password" name="confirmPassword" required="required"/>
+        </div>
+        <input type="submit" value="submit"/>
+    </form>
+    <form action="./signin" method="post">
+        <h2>sign in</h2>
+        <%if(errors && errors.signin){%>
+        <%for(var i=0; i<errors.signin.length; i++){%>
+        <div><%= errors.signin[i] %></div>
+        <%}}%>
+        <div class="group">
+            <label>username:</label>
+            <input type="text" name="username" required="required"/>
+        </div>
+        <div class="group">
+            <label>password:</label>
+            <input type="password" name="password" required="required"/>
+        </div>
+        <input type="submit" value="submit"/>
+    </form>
+</div>
+</body>
+</html>

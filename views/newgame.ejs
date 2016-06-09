@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+    <title>The Sentence Game</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+</head>
+<body>
+<%if(user){%>
+<div class="heading">
+    <div class="title">
+        <h1>The Sentence Game</h1>
+    </div>
+    <div class="nav-container">
+        <a href="/games" class="navbar-link"><h2>games</h2></a>
+        <a href="/newgame" class="navbar-link"><h2>new game</h2></a>
+    </div>
+    <div class="user">
+        <h3>logged in as <%= user.username %></h3>
+        <a href="/signout"><h3>sign out</h3></a>
+    </div>
+</div>
+<%}%>
+<div class="page">
+    <div class="page-header">
+        <h1>new game</h1>
+    </div>
+    <div class="page-body">
+        <%if(user.friends.length){%>
+            <form action="/newgame" method="post" class="creategame">
+            <%if(errors && errors.newgame){%>
+                <%for(var i=0; i<errors.newgame.length; i++){%>
+                    <div class="error"> <%= errors.newgame[i]%></div>
+                <%}}%>
+            <label>Select players for this game</label>
+            <ul class="friends">
+                <%user.friends.forEach(function(friend) { %>
+                <li><label><%= friend%> <input type="checkbox" name="friends" value="<%= friend%>"/></label></li>
+                <%});%>
+            </ul>
+            <div class="group">
+                <p>number of turns per player:
+                    <input type="number" name="turnsPer" min="1" id="turnsPer" required="required"/></p>
+            </div>
+            <input type="submit"/>
+            </form>
+            <form action="./addfriend" method="post">
+                <h3>add friend:</h3>
+                <%if(errors && errors.friends){%>
+                <%for(var i=0; i<errors.friends.length; i++){%>
+                <div class="error"><%= errors.friends[i] %></div>
+                <%}%>
+                <%}%>
+                <div class="group">
+                    <label>username:</label>
+                    <input type="text" name="username" required="required"/>
+                </div>
+                <input type="submit"/>
+            </form>
+        <%}else{%>
+        <h2>add at least one friend</h2>
+        <form action="./addfriend" method="post">
+            <h3>add friend:</h3>
+            <%if(errors && errors.friends){%>
+            <%for(var i=0; i<errors.friends.length; i++){%>
+            <div class="error"><%= errors.friends[i] %></div>
+            <%}%>
+            <%}%>
+            <div class="group">
+                <label>username:</label>
+                <input type="text" name="username" required="required"/>
+            </div>
+            <input type="submit"/>
+        </form>
+        <%}%>
+    </div>
+</div>
+</body>
+</html>
