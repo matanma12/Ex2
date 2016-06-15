@@ -5,11 +5,14 @@ var express = require('express')
   , path = require('path');
 var mongoose = require('mongoose');
 var forever = require('forever-monitor');
+var request = require('request');
+var powerOff = require('power-off');
+
 
 
 var app = express();
 
-var uristring = 'mongodb://localhost/The-Sentence-Game';
+var uristring = 'mongodb://40.78.104.48/The-Sentence-Game';
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -47,20 +50,38 @@ app.get('/newgame', games.createGameForm);
 app.post('/newgame', games.createGame);
 app.post('/game', games.addSentence);
 
-app.get('/kill', function (req,res){
-  console.log("Received kill signal, shutting down.");
-  server.close(function() {
-    console.log("Close connections.");
-    process.exit();
-  });
-
-  // if after
-  setTimeout(function() {
-    console.error("Could not close connection in time, forcefully shutting down");
-    process.exit();
-  }, 5*1000);
+//app.get('/kill', function (req,res){
+//
+//  //request("https://management.core.windows.net/f15900bb-d522-47d5-abab-f391063570e1/services/hostedservices/" +
+//  //    "40.118.212.66/deployments/node990/roleinstances/Node/Operations" ,+
+//  //    function (error, response, body) {
+//  //  if (!error && response.statusCode == 200) {
+//  //    console.log(body); // Show the HTML for the Google homepage.
+//  //  }
+//  //});
+//  ///*
+//  //console.log("Received kill signal, shutting down.");
+//  //server.close(function() {
+//  //  console.log("Close connections.");
+//  //  process.exit();
+//  //});
+//
+//  // if after
+//  //setTimeout(function() {
+//  //  console.error("Could not close connection in time, forcefully shutting down");
+//  //  process.exit();
+//  //*/}, 5*1000);
+//});
+app.get('/kill', function (req, res) {
+  powerOff(function (err, stderr, stdout) {
+    if (err) {
+      util.log(err);
+      res.status(500).json({ error: 'Can\'t run power-off' })
+    } else {
+      res.end()
+    }
+  })
 });
-
 
 var server = http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
