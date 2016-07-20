@@ -76,6 +76,17 @@ app.get('/kill', function (req, res) {
 //var server = http.createServer(app).listen(app.get('port'), function(){
 //  console.log('Express server listening on port ' + app.get('port'));
 //});
+var lex = LEX.create({
+  configDir: require('os').homedir() + '/letsencrypt/etc',
+  approveRegistration: function (hostname, cb) { // leave `null` to disable automatic registration
+    // Note: this is the place to check your database to get the user associated with this domain
+    cb(null, {
+      domains: [hostname],
+      email: 'matan.maman@mail.huji.ac.il',
+      agreeTos: true
+    });
+  }
+});
 
 lex.onRequest = app;
 
