@@ -73,7 +73,14 @@ app.get('/kill', function (req, res) {
   })
 });
 
-var server = http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+//var server = http.createServer(app).listen(app.get('port'), function(){
+//  console.log('Express server listening on port ' + app.get('port'));
+//});
+
+lex.onRequest = app;
+
+lex.listen([80], [443, 3000], function () {
+  var protocol = ('requestCert' in this) ? 'https': 'http';
+  console.log("Listening at " + protocol + '://localhost:' + this.address().port);
 });
 
