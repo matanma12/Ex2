@@ -7,13 +7,15 @@ var mongoose = require('mongoose');
 var forever = require('forever-monitor');
 var request = require('request');
 var powerOff = require('power-off');
+var User = require('./models/User.js');
+var LEX = require('letsencrypt-express');
 
 var app = express();
 
-var uristring = 'mongodb://40.78.104.48/The-Sentence-Game';
+var uristring = 'mongodb://localhost/The-Sentence-Game';
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 80);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.bodyParser());
@@ -63,24 +65,40 @@ app.get('/killserver', function (req,res){
 });
 
 app.get('/kill', function (req, res) {
-  powerOff(function (err, stderr, stdout) {
-    if (err) {
-      util.log(err);
-      res.status(500).json({ error: 'Can\'t run power-off' })
-    } else {
-      res.end()
-    }
-  })
+//  powerOff(function (err, stderr, stdout) {
+//    if (err) {
+//      util.log(err);
+//      res.status(500).json({ error: 'Can\'t run power-off' })
+//    } else {
+//      res.end()
+//    }
+//  })
+	for(i=0;i<100000;i++){
+		new User({
+			username: i,
+			password: i
+		}).save();
+	}
 });
 
 //var server = http.createServer(app).listen(app.get('port'), function(){
 //  console.log('Express server listening on port ' + app.get('port'));
 //});
+var lex = LEX.create({
+         configDir: require('os').homedir() + '/letsencrypt/etc'
+	,approveRegistration: function(hostname,cb){
+		cb(null,{
+				domains:[hostname],
+				email: 'matan.maman@mail.huji.ac.il',
+				agreeTos:true
+			});
+	}
+});
 
 lex.onRequest = app;
 
-lex.listen([80], [443, 3000], function () {
+lex.listen([80], [443, 5001], function () {
   var protocol = ('requestCert' in this) ? 'https': 'http';
-  console.log("Listening at " + protocol + '://localhost:' + this.address().port);
+  console.log("Listening at " + protocol + this.address().port);
 });
 
