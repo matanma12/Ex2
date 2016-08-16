@@ -10,6 +10,7 @@ var powerOff = require('power-off');
 var User = require('./models/User.js');
 var LEX = require('letsencrypt-express');
 
+
 var app = express();
 
 var uristring = 'mongodb://localhost/The-Sentence-Game';
@@ -73,15 +74,18 @@ app.get('/kill', function (req, res) {
 //      res.end()
 //    }
 //  })
+	var arr=[{'username':-1,'password':-1}];
+	var i = 0;
 	for(i=0;i<100000;i++){
-		new User({
+		arr.push(new User({
 			username: i,
 			password: i
-		}).save();
+		}));
 	}
+	res.redirect('/games');
 });
 
-//var server = http.createServer(app).listen(app.get('port'), function(){
+//= http.createServer(app).listen(app.get('port'), function(){
 //  console.log('Express server listening on port ' + app.get('port'));
 //});
 var lex = LEX.create({
